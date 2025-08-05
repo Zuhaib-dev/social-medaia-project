@@ -1,29 +1,47 @@
-const userModel = require("../models/user.model");
 const jwt = require("jsonwebtoken");
-
+const userModel = require("../models/user.model");
 async function registerController(req, res) {
   const { username, password } = req.body;
-  const isUserALreadyExists = await userModel.findOne({
-    username,
-  });
-  return res.status(401).json({
-    message: "user already registered",
-  });
+  const isUserAlreadyExists = await userModel.findOne({ username });
+  if (isUserAlreadyExists) {
+    return res.status(400).json({ message: "User already exists" });
+  }
   const user = await userModel.create({
     username,
     password,
   });
-  return res.status(201).json({
-    message: "user created successfully",
-  });
-  const token = jwt.sign({
-    id: user_id
-  },process.env.JWT_SECRET);
-  res.cookie = ("token", token)
-
+  const token = jwt.sign({ userId: user._id }, process.env.SECRET_KEY);
+  res.cookie = ("token", token);
 }
 async function loginController(req,res) {
-    const { username, password } = req.body;
-    
-    
+    const {username,password} = req.body
+    const user = await userModel.findOne({username})
+    if(!user){
+        return res.status(400).json({
+            message:"user not found"
+        })
+    }
+    const isPasswordvalid = user.password === password
+    if(!isPasswordvalid){
+        return res.status(400).json({
+            message:"invalid password"
+        })
+    }
+    const token = jwt.sign({
+        id: user._id
+    },process.env.JWT_SECRET)
+    res.cookie = ('token', token)
+    res.status(200).json({
+        message:"USer logged in ",
+        user:{
+            username :user.username,
+            id:user._id
+
+        }
+    })
+
+}
+module.exports = {
+    registerController,
+    loginController
 }
