@@ -10,7 +10,7 @@ async function registerController(req, res) {
     username,
     password,
   });
-  const token = jwt.sign({ userId: user._id }, process.env.SECRET_KEY);
+  const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET);
   res.cookie = ("token", token);
 }
 async function loginController(req,res) {
