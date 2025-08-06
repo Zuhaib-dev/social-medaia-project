@@ -22,7 +22,9 @@ async function generateCaption(base64ImageFile) {
       you are an expert in generate images.
       you generate single caption for the image.
       your caption should be short and concise.
-      you use hashtags and emojis in the captions
+      you use hashtags and emojis in the captions.
+      use tapori language.
+      use asthethic language.
       `
     }
   });
