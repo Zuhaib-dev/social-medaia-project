@@ -8,7 +8,8 @@ const  imagekit = new ImageKit({
 async function uploadFile(file,filename) {
     const response = await imagekit.upload({
         file: file,
-        fileName: filename
+        fileName: filename,
+        folder:"AI-social-media-project"
     })
     
     return response
